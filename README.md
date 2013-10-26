@@ -9,7 +9,8 @@ Inference Module
    debugging purposes.
 
 2) The source is able to be imported into eclipse, but it will not run until dependency
-   jars are not downloaded.
+   jars are downloaded.
 
 3) In case more jars are added in the future, it would be good to update de file
-   Libraries/jars.txt instead of add the jars directly.
+   Libraries/jars.txt instead of add the jars directly. Or a dependency manager could
+   be configured (like maven).

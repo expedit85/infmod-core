@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="res"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="libs/jena-2.6.4.jar" sourcepath="libs/jena-2.6.4-sources.jar"/>
 	<classpathentry kind="lib" path="libs/arq-2.8.8.jar" sourcepath="libs/arq-2.8.8-sources.jar"/>
