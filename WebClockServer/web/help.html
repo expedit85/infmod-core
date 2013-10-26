@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<style>
+	body {
+		font-family: sans-serif;
+	}
+	.recuado {
+		margin-left: 5%;
+		padding: 5px;
+		border-style: dotted;
+		border-width: 1px;
+		text-align: left;
+	}
+	.recuado pre {
+		text-align: center;
+		color: red;
+		font-style: italic;
+	}
+	ul li {
+		font-size: large;
+		list-style-type: square;
+		margin-top: 10px;
+		margin-bottom: 0px;
+	}
+	p {
+		margin-top: 4px;
+		margin-bottom: 10px;
+		font-size: medium;
+	}
+	table {
+		table-layout: fixed;
+		border-color: #000;
+		border-style: solid;
+		border-width: 1px;
+		font-size: smaller;
+		margin-left: 20px;
+		width: inherit;
+	}
+	ul ol li {
+		font-size: smaller;
+		list-style-type: circle;
+		margin-top: auto;
+		margin-bottom: auto;
+	}
+	</style>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Clock REST Interface Help</title>
+</head>
+<body>
+
+<h2>Ajuda da interface REST do relógio</h2>
+
+<div class="recuado">
+	<p>O formato padrão de data e hora utilizado é o definido para UTC pelo W3C para xsd:dateTime:</p>
+	<pre>yyyy-MM-dd'T'HH:mm:ss'Z'</pre>
+	<p>Exemplo:</p>
+	<pre>2011-12-21T14:57:00Z</pre>
+</div>
+
+<h3>Comandos REST aceitos</h3>
+<ul>
+	<li>/ <small>e</small> /help</li>
+	<p>Exibe esta ajuda.</p>
+	
+	<li>/admin</li>
+	<p>Página de <a href="/admin">administração</a> via Web</p>
+
+	<li>/datetime</li>
+	<p>Mostra o horário atual simulado no formato padrão.</p>
+	
+	<li>/milliseconds</li>
+	<p>Mostra o horário atual simulado em milissegundos</p>
+	
+	<li>/info</li>
+	<p>Retorna um XML com várias informações do relógio.</p>
+	
+	<li>/configure</li>
+	<p>Configura o relógio com base em três parâmetros: <em>startdate</em>, <em>finaldate</em> e <em>speedrate</em>:</p>
+	<p>
+	<table>
+	<tr><th>Parâmetro</th><th>Valor</th></tr>
+	<tr><td>startdate</td><td>Data inicial no formato padrão.</td></tr>
+	<tr><td>finaldate</td><td>Data final no formato padrão.</td></tr>
+	<tr><td>speedrate</td><td>Taxa de atualização do relógio. Ex. 60 representa que passam 60s a cada 1s.</td></tr>
+	</table>
+	</p>
+	<p>Duas combinações de parâmetros são aceitas:</p>
+	<p>
+	<ol>
+		<li>Todos os parâmetros: configuração global que reinicia o relógio.</li>
+		<li>Apenas <em>speedrate</em>: altera apenas a taxa de atualização do relógio atualmente em execução.</li>
+	</ol>
+	</p>
+	
+	<li>/restart</li>
+	<p>Reinicia o relógio com base na sua configuração atual</p>
+	
+	<li>/isalive</li>
+	<p>Retorna true enquanto relógio estiver em execução, ou seja, não alcançou a data final (<em>finaldate</em>)</p>
+
+</ul>
+
+</body>
+</html>

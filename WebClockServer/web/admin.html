@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<style>
+		body {
+			font-family: sans-serif;
+		}
+		.recuado {
+			margin-left: 5%;
+			padding: 5px;
+			border-style: dotted;
+			border-width: 1px;
+			text-align: left;
+		}
+		.recuado pre {
+			text-align: center;
+			color: red;
+			font-style: italic;
+		}
+		.message {
+			padding-left: 20px;
+		}
+		ul li {
+			font-size: large;
+			list-style-type: square;
+			margin-top: 10px;
+			margin-bottom: 0px;
+		}
+		p {
+			margin-top: 4px;
+			margin-bottom: 10px;
+			font-size: medium;
+		}
+		table {
+			table-layout: fixed;
+			border-color: #000;
+			border-style: solid;
+			border-width: 1px;
+			font-size: smaller;
+			padding-left: 16px;
+			padding-right: 16px;
+			margin-left: 20px;
+			margin-right: 20px;
+			max-width: 100%;
+			min-width: 200px;
+			width: auto;
+		}
+		div.large {
+			display: block;
+			min-width: 760px;
+			border-style: none;
+			margin: 20px;
+			border-style: solid;
+			border-width: 1px;
+			border-color: #000;
+			padding: 4px;
+			margin-top: 20px;
+		}
+		div.inline {
+			display: inline-block;
+			border-style: none;
+			position: relative;
+		}
+		ul ol li {
+			font-size: smaller;
+			list-style-type: circle;
+			margin-top: auto;
+			margin-bottom: auto;
+		}
+		</style>
+		
+		
+		<script type="text/javascript">
+		starting = true;
+		lastResponseTime = 0;
+		
+		xhrDatetime = new XMLHttpRequest();
+		xhrDatetime.onreadystatechange = function()
+		{
+			if (xhrDatetime.readyState==4 && xhrDatetime.status==200)
+			{
+				document.getElementById('datetime').innerHTML = xhrDatetime.responseText;
+			}
+		};
+
+		xhrMillis = new XMLHttpRequest();
+		xhrMillis.onreadystatechange = function()
+		{
+			if (xhrMillis.readyState==4 && xhrMillis.status==200)
+			{
+				document.getElementById('milliseconds').innerHTML = xhrMillis.responseText;
+			}
+		};
+		
+		xhrAlive = new XMLHttpRequest();
+		xhrAlive.onreadystatechange = function()
+		{
+			if (xhrAlive.readyState==4 && xhrAlive.status==200)
+			{
+				document.getElementById('alive').innerHTML = xhrAlive.responseText;
+				lastResponseTime = new Date().getTime();
+			}
+		};
+	
+		function update() {
+			if (starting) {
+				getDate();
+				getMilliseconds();
+				getIsAlive();
+				starting = false;
+			}
+
+			if (xhrDatetime.readyState==4) getDate();
+			if (xhrMillis.readyState==4) getMilliseconds();
+			if (xhrAlive.readyState==4) getIsAlive();
+			
+			time = new Date().getTime();
+			if (time - lastResponseTime > 1000) {
+				msg = "Tempo de espera por resposta excedido!";
+			}
+			else msg = "&nbsp;";
+
+			document.getElementById('status_id').innerHTML = msg;
+
+
+			setTimeout("update()", 250);
+		}
+		
+
+		function getDate() {
+			xhrDatetime.open("GET", "/datetime", true);
+			xhrDatetime.send();
+		}
+		
+		function getMilliseconds() {
+			xhrMillis.open("GET", "/milliseconds",true);
+			xhrMillis.send();
+		}
+		
+		function getIsAlive() {
+			xhrAlive.open("GET", "/isalive", true);
+			xhrAlive.send();
+		}
+		
+		
+		
+		
+		function doRestart() {
+			document.getElementById('restart_result').innerHTML = "Aguardando...";
+			xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", "/restart", false);
+			xmlhttp.send();
+			document.getElementById('restart_result').innerHTML = xmlhttp.status + ' ' + xmlhttp.statusText;
+		}
+		
+
+		function setSpeedRate() {
+			document.getElementById('speed_rate_result').innerHTML = "Aguardando...";
+			xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET","/configure?speedrate=" + document.getElementById('_speed_rate1').value, false);
+			xmlhttp.send();
+			document.getElementById('speed_rate_result').innerHTML = xmlhttp.status + ' ' + xmlhttp.statusText;
+		}
+
+		function doConfig() {
+			document.getElementById('configure_result').innerHTML = "Aguardando...";
+			url = "/configure" +
+				  "?speedrate=" + document.getElementById('_speed_rate2').value +
+				  "&startdate=" + document.getElementById('_start_date').value +
+				  "&finaldate=" + document.getElementById('_final_date').value;
+			xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", url, false);
+			xmlhttp.send();
+			document.getElementById('configure_result').innerHTML = xmlhttp.status + ' ' + xmlhttp.statusText;
+		}
+		
+		</script>
+	
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Clock Admin Page</title>
+	</head>
+	<body onload="update()">
+	
+	<h2>Administração</h2>
+	
+	<h3>Informações</h3>
+	<table>
+	<tr><td colspan="2" id="s">&nbsp;</td></tr>
+	<tr><th style="text-align: right;">XML Schema Datetime:</th><td id="datetime" class="message"></td></tr>
+	<tr><th style="text-align: right;">Milliseconds:</th><td id="milliseconds" class="message"></td></tr>
+	<tr><th style="text-align: right;">Is alive:</th><td id="alive" class="message"></td></tr>
+	<tr><td colspan="2" id="status_id">&nbsp;</td></tr>
+	</table>
+	
+	
+	<h3>Configuração</h3>
+	
+		<form action="" method="get" name="frm">
+			<div class="large">
+				<div class="inline">Reinicar relógio:</div>
+				<div class="inline"><input type="button" onclick="doRestart()" value="Enviar" /></div>
+				<div class="inline message" id="restart_result"></div>
+			</div>
+			<div class="large">
+				<div class="inline">Taxa de atualização:</div>
+				<div class="inline"><input type="text" name="speed_rate" id="_speed_rate1" value="120.0"/></div>
+				<div class="inline"><input type="button" onclick="setSpeedRate()" value="Enviar" /></div>
+				<div class="inline message" id="speed_rate_result"></div>
+			</div>
+			<div class="large">
+				<div class="inline">
+					<table style="border: none; padding: 0px; margin: 0px; ">
+						<tr>
+							<td>Taxa de atualização:</td>
+							<td>
+								<input type="text" name="speed_rate" id="_speed_rate2" value="120.0" />
+							</td>
+						</tr>
+						<tr>
+							<td>Data inicial:</td>
+							<td>
+								<input type="text" name="start_date" id="_start_date" value="2010-01-01T00:00:00Z" />
+							</td>
+						</tr>
+						<tr>
+							<td>Data final:</td>
+							<td>
+								<input type="text" name="final_date" id="_final_date" value="2010-06-30T23:59:59Z" />
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="inline" style="vertical-align: top;">
+					<input type="button" onclick="doConfig()" value="Enviar" />
+				</div>
+				<div class="inline message" id="configure_result"  style="vertical-align: top;"></div>
+			</div>
+		</form>
+	</body>
+</html>
