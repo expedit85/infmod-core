@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<InferenceModule>
+	<name>Exemplo usando Pellet Reasoner</name>
+	<prefixes>
+		<Prefix>
+			<prefix>rdf</prefix>
+			<namespace>http://www.w3.org/1999/02/22-rdf-syntax-ns#</namespace>
+		</Prefix>
+		<Prefix>
+			<prefix>rdfs</prefix>
+			<namespace>http://www.w3.org/2000/01/rdf-schema#</namespace>
+		</Prefix>
+		<Prefix>
+			<prefix>xsd</prefix>
+			<namespace>http://www.w3.org/2001/XMLSchema#</namespace>
+		</Prefix>
+		<Prefix>
+			<prefix>owl</prefix>
+			<namespace>http://www.w3.org/2002/07/owl#</namespace>
+		</Prefix>
+		<Prefix>
+			<prefix>x</prefix>
+			<namespace>http://x.com/</namespace>
+		</Prefix>
+		<Prefix>
+			<prefix>infmod</prefix>
+			<namespace>http://greco.ppgi.ufrj.br/inferencemodule/vocabulary#</namespace>
+		</Prefix>
+ 	</prefixes>
+	<clock baseUri="http://localhost:3030/" endpoint="" />
+	<resourceBaseUri>http://example.com/resource/</resourceBaseUri>
+	<updatePolicy class="ClearDataPolicy" />
+	<loaders>
+		<PullLoader>
+			<description>Query para carga inicial</description>
+			<endpoint>http://localhost:50000/graph/sparql</endpoint>
+			<queryConfigs>
+				<QueryData>
+					<query>
+						<![CDATA[
+						PREFIX :<http://x.com/>
+						CONSTRUCT {
+						}
+						WHERE {
+						}
+						]]>
+					</query>
+					<interval>2*60*60*1000</interval>
+					<binder class="DefaultQueryParameterBinder" />
+				</QueryData>
+			</queryConfigs>
+		</PullLoader>
+	</loaders>
+	<inference>
+		<reasoner>PELLET</reasoner>
+		<ontology>./explo-pellet.owl.ttl</ontology>
+	</inference>
+	<sparqlServer>
+		<path>/graph/</path>
+		<port>50000</port>
+		<fastUpdate>true</fastUpdate>
+	</sparqlServer>
+</InferenceModule>

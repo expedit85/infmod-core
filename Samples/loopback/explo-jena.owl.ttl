@@ -1,0 +1,50 @@
+@prefix : <http://x.com/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:<http://www.w3.org/2002/07/owl#> .
+@prefix swrl:  <http://www.w3.org/2003/11/swrl#> .
+@prefix swrlb: <http://www.w3.org/2003/11/swrlb#> .
+
+####################################
+# TBOX
+####################################
+
+:Person a owl:Class .
+
+:Male a owl:Class .
+
+:hasChild a owl:ObjectProperty .
+
+:hasParent a owl:ObjectProperty ;
+	owl:inverseOf :hasChild .
+
+:hasFather a owl:ObjectProperty ;
+	rdfs:domain :Person ;
+	rdfs:range :Father ;
+	rdfs:subPropertyOf :hasParent .
+
+:Father a owl:Class ;
+	owl:equivalentClass [
+		a owl:Class ;
+		owl:intersectionOf (
+			:Person
+			:Male
+			[	a owl:Restriction ;
+				owl:onProperty :hasChild ;
+				owl:someValuesFrom :Person
+			] )
+	] .
+
+
+####################################
+# ABOX
+####################################
+
+# Person(CAIN)
+:CAIN a :Person .
+
+# hasFather(ABEL, ADAM)
+:CAIN :hasFather :ADAM .
+
+# hasFather(CAIN, ADAM)
+:ABEL :hasFather :ADAM .

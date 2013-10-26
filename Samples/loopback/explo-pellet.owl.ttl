@@ -1,0 +1,75 @@
+@prefix : <http://x.com/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:<http://www.w3.org/2002/07/owl#> .
+@prefix swrl:  <http://www.w3.org/2003/11/swrl#> .
+@prefix swrlb: <http://www.w3.org/2003/11/swrlb#> .
+
+####################################
+# TBOX
+####################################
+
+:Person a owl:Class .
+
+:Male a owl:Class .
+
+:hasChild a owl:ObjectProperty .
+
+:hasParent a owl:ObjectProperty ;
+	owl:inverseOf :hasChild .
+
+:hasFather a owl:ObjectProperty ;
+	rdfs:domain :Person ;
+	rdfs:range :Father ;
+	rdfs:subPropertyOf :hasParent .
+
+:Father a owl:Class ;
+	owl:equivalentClass [
+		a owl:Class ;
+		owl:intersectionOf (
+			:Person
+			:Male
+			[	a owl:Restriction ;
+				owl:onProperty :hasChild ;
+				owl:someValuesFrom :Person
+			] )
+	] .
+
+
+####################################
+# ABOX
+####################################
+
+# Person(CAIN)
+:CAIN a :Person .
+
+# hasFather(ABEL, ADAM)
+:CAIN :hasFather :ADAM .
+
+# hasFather(CAIN, ADAM)
+:ABEL :hasFather :ADAM .
+
+
+####################################
+# SWRL Rules
+####################################
+
+# sibling(x, y) <- hasFather(x, z), hasFather(y, z)
+<urn:swrl#x> a swrl:Variable .
+<urn:swrl#y> a swrl:Variable .
+<urn:swrl#z> a swrl:Variable .
+
+:R1 a swrl:Imp ;
+	swrl:body (
+		# hasFather(x, z)
+		[ a swrl:IndividualPropertyAtom ; swrl:propertyPredicate :hasFather ; swrl:argument1 <urn:swrl#x> ; swrl:argument2 <urn:swrl#z> ]	
+
+		# hasFather(y, z)
+		[ a swrl:IndividualPropertyAtom ; swrl:propertyPredicate :hasFather ; swrl:argument1 <urn:swrl#y> ; swrl:argument2 <urn:swrl#z> ]	
+	) ;
+	swrl:head (
+		# sibling(x,y)
+		[ a swrl:IndividualPropertyAtom ; swrl:propertyPredicate :sibling ; swrl:argument1 <urn:swrl#x> ; swrl:argument2 <urn:swrl#y> ]
+	)
+.
+
