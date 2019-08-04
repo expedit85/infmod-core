@@ -7,10 +7,10 @@ Folders:
 --------
 
 
-- WebClockServer/		clock emulator (start, final e rate may be configured)
-- InferenceModule/	Inference Module engine
-- Libraries/		common sources (used by both projects above)
-- Samples/		samples
+- *WebClockServer*	- clock emulator (start, final e rate may be configured)
+- *InferenceModule* - Inference Module engine
+- *Libraries* - common sources (used by both projects above)
+- *Samples* - samples
 
 
 Tips:
